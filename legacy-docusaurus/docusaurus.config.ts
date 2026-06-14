@@ -7,9 +7,9 @@ const config: Config = {
   tagline: 'Rust, server, Tauri, and TypeScript tooling for local llama.cpp applications.',
   favicon: 'img/favicon.png',
   url: 'https://dominguesm.github.io',
-  baseUrl: '/llama-crab/',
+  baseUrl: '/llama-crab-docs/',
   organizationName: 'DominguesM',
-  projectName: 'llama-crab',
+  projectName: 'llama-crab-docs',
   trailingSlash: true,
 
   presets: [
@@ -20,7 +20,7 @@ const config: Config = {
           path: 'docs',
           routeBasePath: '/',
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/DominguesM/llama-crab/tree/main/docs/',
+          editUrl: 'https://github.com/DominguesM/llama-crab-docs/tree/main/legacy-docusaurus/docs/',
         },
         blog: false,
         theme: {
@@ -45,8 +45,8 @@ const config: Config = {
         {to: '/tauri/', label: 'Tauri', position: 'left'},
         {to: '/typescript/', label: 'TypeScript', position: 'left'},
         {to: '/examples/', label: 'Examples', position: 'left'},
-        {href: 'https://dominguesm.github.io/llama-crab/api/rust/llama_crab/', label: 'Rust API', position: 'right'},
-        {href: 'https://github.com/DominguesM/llama-crab', label: 'GitHub', position: 'right'},
+        {href: 'https://dominguesm.github.io/llama-crab-docs/api/rust/llama_crab/', label: 'Rust API', position: 'right'},
+        {href: 'https://github.com/DominguesM/llama-crab-docs', label: 'GitHub', position: 'right'},
       ],
     },
     footer: {
@@ -63,15 +63,15 @@ const config: Config = {
         {
           title: 'API',
           items: [
-            {label: 'Rust API', href: 'https://dominguesm.github.io/llama-crab/api/rust/llama_crab/'},
-            {label: 'TypeScript API', href: 'https://dominguesm.github.io/llama-crab/api/typescript/'},
+            {label: 'Rust API', href: 'https://dominguesm.github.io/llama-crab-docs/api/rust/llama_crab/'},
+            {label: 'TypeScript API', href: 'https://dominguesm.github.io/llama-crab-docs/api/typescript/'},
             {label: 'docs.rs', href: 'https://docs.rs/llama-crab'},
           ],
         },
         {
           title: 'Project',
           items: [
-            {label: 'GitHub', href: 'https://github.com/DominguesM/llama-crab'},
+            {label: 'GitHub', href: 'https://github.com/DominguesM/llama-crab-docs'},
             {label: 'crates.io', href: 'https://crates.io/crates/llama-crab'},
             {label: 'npm packages', to: '/typescript/packages/'},
           ],
