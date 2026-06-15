@@ -1,0 +1,22 @@
+# nixpacks.toml
+# https://nixpacks.com/docs/configuration/file
+
+[variables]
+NIXPACKS_BUN_VERSION = '1'
+CI = 'true'
+NO_COLOR = '1'
+NODE_ENV = 'production'
+
+[phases.install]
+onlyIncludeFiles = [
+  'package.json',
+]
+
+[phases.build]
+dependsOn = ['install']
+cmds = ['bun run build']
+
+[start]
+dependsOn = ['build']
+onlyIncludeFiles = ['.output']
+cmd = 'bun run .output/server/index.mjs'
