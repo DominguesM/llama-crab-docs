@@ -1,26 +1,28 @@
 ---
 seo:
-  title: Write beautiful docs with Markdown
-  description: Ship fast, flexible, and SEO-optimized documentation with beautiful
-    design out of the box. Docus brings together the best of the Nuxt ecosystem.
-    Powered by Nuxt UI.
+  title: llama-crab - Local GGUF inference for Rust, server, Tauri, and TypeScript
+  description: Run local GGUF models from your applications. Rust SDK, OpenAI-compatible HTTP server, Tauri plugin, and TypeScript client contracts.
 ---
 
 ::u-page-hero
 #title
-Write beautiful docs with Markdown
+<span class="inline-flex flex-col items-center gap-4">
+  <img src="/logo.webp" alt="llama-crab logo" class="size-24 rounded-2xl shadow-xl ring-1 ring-default/10" />
+  <span class="text-primary">llama-crab</span>
+  <span>Run local GGUF models from your applications</span>
+</span>
 
 #description
-Ship fast, flexible, and SEO-optimized documentation with beautiful design out of the box.
+`llama-crab` is a Rust SDK, installable HTTP server, Tauri plugin, and TypeScript client for running local llama.cpp models.
 
-Docus brings the best of the Nuxt ecosystem into one CLI.
+Start with the surface you plan to use:
 
 #links
   :::u-button
   ---
-  color: neutral
+  color: primary
   size: xl
-  to: /getting-started/installation
+  to: /getting-started/introduction
   trailing-icon: i-lucide-arrow-right
   ---
   Get started
@@ -31,93 +33,197 @@ Docus brings the best of the Nuxt ecosystem into one CLI.
   color: neutral
   icon: simple-icons-github
   size: xl
-  to: https://github.com/nuxt-content/docus
+  to: https://github.com/DominguesM/llama-crab
   variant: outline
   ---
-  Star on GitHub
+  GitHub
   :::
 ::
 
 ::u-page-section
 #title
-Shipped with many features
+Pick the integration that matches your stack
 
 #features
   :::u-page-feature
   ---
-  icon: i-simple-icons-nuxt
-  target: _blank
-  to: https://nuxt.com
+  icon: i-lucide-code
+  to: /rust/lifecycle
   ---
   #title
-  Built with [Nuxt 4]{.text-primary}
-  
+  Rust SDK
+
   #description
-  Optimized by the most famous Vue framework. Docus gives you everything you need to build fast, performant, and SEO-friendly websites.
+  Embed local inference directly in Rust applications. Load GGUF models, run text completion, chat, embeddings, structured output, and multimodal vision.
   :::
 
   :::u-page-feature
   ---
-  icon: i-simple-icons-nuxt
-  target: _blank
-  to: https://ui.nuxt.com/
+  icon: i-lucide-server
+  to: /server/running
   ---
   #title
-  Powered by [Nuxt UI]{.text-primary}
-  
+  HTTP server
+
   #description
-  Beautiful out of the box, minimal by design but highly customizable. Docus leverages Nuxt UI to give you the best docs writing experience with zero boilerplate, just focus on your content.
+  Run `llama-crab-server` to expose local models behind OpenAI-compatible routes: completions, chat, embeddings, reranking, and tokenization.
   :::
 
   :::u-page-feature
   ---
-  icon: i-simple-icons-nuxt
-  target: _blank
-  to: https://content.nuxt.com
+  icon: i-lucide-app-window
+  to: /tauri/plugin
   ---
   #title
-  Enhanced Markdown syntax by [Nuxt Content]{.text-primary}
-  
+  Tauri plugin
+
   #description
-  The only thing you need to take care about is writing your content. Write your pages in Markdown and extend with MDC syntax to embed Nuxt UI or custom Vue components. Structure, routing, and rendering are handled for you.
+  Ship local inference inside Tauri v2 desktop applications with `tauri-plugin-llama-crab` and the `@llama-crab/tauri` TypeScript client.
   :::
 
   :::u-page-feature
   ---
-  icon: i-simple-icons-nuxt
-  target: _blank
-  to: https://nuxt.com/docs/guide/directory-structure/app-config
+  icon: i-simple-icons-typescript
+  to: /typescript/packages
   ---
   #title
-  Customize with [Nuxt App Config]{.text-primary}
-  
+  TypeScript packages
+
   #description
-  Update colors, social links, header logos and component styles globally using the `app.config.ts`, no direct code modifications required.
+  Use `@llama-crab/core` for shared OpenAI-like contracts and `@llama-crab/tauri` for the Tauri IPC client. Both ship ESM, CJS, and type declarations.
+  :::
+::
+
+::u-page-section
+#title
+Built for production workloads
+
+#features
+  :::u-page-feature
+  ---
+  icon: i-lucide-layers
+  ---
+  #title
+  Five products, one runtime
+
+  #description
+  `llama-crab` (Rust SDK), `llama-crab-server` (HTTP server), `tauri-plugin-llama-crab` (Tauri v2 plugin), `@llama-crab/core` (TS contracts), and `@llama-crab/tauri` (TS client).
   :::
 
   :::u-page-feature
   ---
-  icon: i-simple-icons-nuxt
-  target: _blank
-  to: https://content.nuxt.com/studio
+  icon: i-lucide-cpu
   ---
   #title
-  Edit in production with [Nuxt Studio]{.text-primary}
-  
+  CPU and GPU backends
+
   #description
-  Edit your content in production with zero Markdown knowledge required. Let your non technical colleagues collaborate on the documentation and integrate Vue components without code skills.
+  Pick a Cargo feature for your target: `openmp` for CPU, `metal` for Apple Silicon, `cuda` for NVIDIA, `vulkan`, or `rocm` for AMD. `mtmd` enables multimodal vision.
   :::
 
   :::u-page-feature
   ---
-  icon: i-simple-icons-nuxt
-  target: _blank
-  to: https://ui.nuxt.com/components/content-search
+  icon: i-lucide-zap
   ---
   #title
-  Built-in navigation and [full-text search]{.text-primary}
-  
+  OpenAI-compatible API
+
   #description
-  Only focus on ordering your content, Docus handles the search modal and auto-generates the side navigation for you.
+  Local models speak the same shape as OpenAI: `/v1/chat/completions`, `/v1/completions`, `/v1/embeddings`, `/v1/rerank`, plus extras for tokenization and model listing.
+  :::
+
+  :::u-page-feature
+  ---
+  icon: i-lucide-smartphone
+  ---
+  #title
+  Mobile presets
+
+  #description
+  `LowRam`, `Balanced`, and `GpuMax` presets match device class so you can ship the same API across phones, laptops, and workstations.
+  :::
+::
+
+::u-page-section
+#title
+Get started in minutes
+
+#features
+  :::u-page-feature
+  ---
+  icon: i-lucide-download
+  to: /getting-started/installation
+  ---
+  #title
+  Install the crate
+
+  #description
+  Add `llama-crab` to your Rust manifest, install the C++ toolchain and CMake, then load a GGUF model in a few lines of Rust.
+  :::
+
+  :::u-page-feature
+  ---
+  icon: i-lucide-terminal
+  to: /getting-started/first-run
+  ---
+  #title
+  Run your first completion
+
+  #description
+  Create a small Rust binary, point it at a quantized GGUF model, and run a `cargo run --release` to see generated text.
+  :::
+
+  :::u-page-feature
+  ---
+  icon: i-lucide-book-open
+  to: /guides/performance
+  ---
+  #title
+  Tune for performance
+
+  #description
+  Set context size, batch size, GPU offload, and threads. Start with the smallest model that exercises your workload and tune one variable at a time.
+  :::
+
+  :::u-page-feature
+  ---
+  icon: i-lucide-life-buoy
+  to: /troubleshooting
+  ---
+  #title
+  Troubleshooting
+
+  #description
+  Common failure modes for the server, Tauri plugin, and TypeScript client, with the exact flags and configurations that resolve them.
+  :::
+::
+
+::u-page-cta
+#title
+Ready to build with local inference?
+
+#description
+The guides explain recommended usage. The generated API references are the source of truth for exact signatures.
+
+#links
+  :::u-button
+  ---
+  color: primary
+  size: xl
+  to: /getting-started/installation
+  trailing-icon: i-lucide-arrow-right
+  ---
+  Install llama-crab
+  :::
+
+  :::u-button
+  ---
+  color: neutral
+  icon: simple-icons-github
+  size: xl
+  to: https://github.com/DominguesM/llama-crab
+  variant: outline
+  ---
+  View on GitHub
   :::
 ::
