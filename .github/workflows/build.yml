@@ -27,6 +27,19 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package.json') }}
+          restore-keys: node-modules-
+
+      - name: Cache OG Images
+        uses: actions/cache@v4
+        with:
+          path: node_modules/.cache/nuxt-seo
+          key: og-images-${{ github.ref_name }}
+
       - name: Install dependencies
         run: bun install
 
@@ -35,6 +48,9 @@ jobs:
         env:
           CI: true
           NO_COLOR: 1
+
+      - name: Copy nixpacks.toml into .output
+        run: cp nixpacks.toml .output/nixpacks.toml
 
       - name: Publish .output to build branch
         uses: peaceiris/actions-gh-pages@v4
