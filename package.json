@@ -1,6 +1,7 @@
 {
   "name": "llama-crab-docs",
   "private": true,
+  "packageManager": "pnpm@11.0.9",
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt build",
@@ -9,8 +10,14 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "docus": "latest",
-    "better-sqlite3": "^12.6.2",
-    "nuxt": "^4.3.1"
+    "better-sqlite3": "12.10.1",
+    "docus": "5.8.1",
+    "nuxt": "4.4.8"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild": "0.28.1",
+      "vite": "8.0.16"
+    }
   }
 }
