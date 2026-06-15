@@ -13,5 +13,8 @@ export default defineNuxtConfig({
         build: {
             target: "esnext",
         },
+        onLog(level, log) {
+            if (log.plugin === "nuxt:module-preload-polyfill") return;
+        },
     },
 });
