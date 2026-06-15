@@ -5,4 +5,9 @@ export default defineNuxtConfig({
     name: 'llama-crab',
     description: 'Local GGUF inference for Rust, HTTP server, Tauri, and TypeScript applications.',
   },
+  vite: {
+    build: {
+      target: 'esnext',
+    },
+  },
 })
