@@ -3,14 +3,19 @@
 
 [variables]
 NIXPACKS_BUN_VERSION = '1'
+NIXPACKS_NODE_PKG_MANAGER = 'bun'
 CI = 'true'
 NO_COLOR = '1'
 NODE_ENV = 'production'
+
+[phases.setup]
+nixPkgs = ['bun']
 
 [phases.install]
 onlyIncludeFiles = [
   'package.json',
 ]
+cmds = ['bun install']
 
 [phases.build]
 dependsOn = ['install']

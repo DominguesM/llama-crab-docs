@@ -16,6 +16,7 @@
   "trustedDependencies": [
     "@parcel/watcher"
   ],
+  "packageManager": "bun@1",
   "engines": {
     "bun": ">=1.0.0"
   }
