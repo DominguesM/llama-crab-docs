@@ -13,7 +13,7 @@ seo:
 </span>
 
 #description
-`llama-crab` is a Rust SDK, installable HTTP server, Tauri plugin, and TypeScript client for running local llama.cpp models. Current version: **0.1.7** (Rust crates and TypeScript packages released in lockstep). MSRV: **1.88**.
+`llama-crab` is a Rust SDK, installable HTTP server, Tauri plugin, and TypeScript client for running local llama.cpp models. Current version: **0.1.8** (Rust crates and TypeScript packages released in lockstep). MSRV: **1.88**.
 
 Start with the surface you plan to use:
 
@@ -54,7 +54,7 @@ Pick the integration that matches your stack
   Rust SDK
 
   #description
-  Embed local inference directly in Rust applications. Load GGUF models, run text completion, chat, embeddings, structured output, multimodal vision, and (in 0.1.7) resolve Hugging Face repository IDs through the `hf-hub` feature.
+  Embed local inference directly in Rust applications. Load GGUF models, run text completion, chat, embeddings, structured output, multimodal vision, and (in 0.1.8) resolve Hugging Face repository IDs through the `hf-hub` feature.
   :::
 
   :::u-page-feature
@@ -90,7 +90,7 @@ Pick the integration that matches your stack
   TypeScript packages
 
   #description
-  Use `@llama-crab/core` for shared OpenAI-like contracts, request mappers, and error classes, and `@llama-crab/tauri` for the Tauri IPC client. Both ship ESM, CJS, and type declarations at version 0.1.7.
+  Use `@llama-crab/core` for shared OpenAI-like contracts, request mappers, and error classes, and `@llama-crab/tauri` for the Tauri IPC client. Both ship ESM, CJS, and type declarations at version 0.1.8.
   :::
 ::
 
@@ -107,7 +107,7 @@ Built for production workloads
   Five products, one runtime
 
   #description
-  `llama-crab` (Rust SDK), `llama-crab-server` (HTTP server), `tauri-plugin-llama-crab` (Tauri v2 plugin), `@llama-crab/core` (TS contracts), and `@llama-crab/tauri` (TS client). All are at version 0.1.7.
+  `llama-crab` (Rust SDK), `llama-crab-server` (HTTP server), `tauri-plugin-llama-crab` (Tauri v2 plugin), `@llama-crab/core` (TS contracts), and `@llama-crab/tauri` (TS client). All are at version 0.1.8.
   :::
 
   :::u-page-feature

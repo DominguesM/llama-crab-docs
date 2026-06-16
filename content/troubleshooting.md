@@ -13,8 +13,8 @@ TypeScript packages. Model-loading, backend, and allocation issues are
 covered separately in
 [Troubleshooting Models](/guides/troubleshooting-models).
 
-The current release is **0.1.7**. Behaviour notes below are verified
-against the `main` branch and the `0.1.7` source tree.
+The current release is **0.1.8**. Behaviour notes below are verified
+against the `main` branch and the `0.1.8` source tree.
 
 ## Server does not start
 
