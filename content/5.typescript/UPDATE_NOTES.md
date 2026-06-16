@@ -2,8 +2,8 @@
 
 ## Source of truth
 
-- `packages/core/` (`@llama-crab/core` v0.1.6)
-- `packages/tauri/` (`@llama-crab/tauri` v0.1.6)
+- `packages/core/` (`@llama-crab/core` v0.1.7)
+- `packages/tauri/` (`@llama-crab/tauri` v0.1.7)
 - `pnpm-workspace.yaml`, root `package.json`
 - `CHANGELOG.md` (v0.1.0 → v0.1.5)
 
@@ -11,14 +11,14 @@
 
 ### `content/5.typescript/1.packages.md`
 
-- Added a `Package overview` table with the current `0.1.6` versions, descriptions, and the `dist` export map (ESM/CJS/types).
+- Added a `Package overview` table with the current `0.1.7` versions, descriptions, and the `dist` export map (ESM/CJS/types).
 - Documented the install command for both packages using the same install snippet format as the rest of the docs (npm / Yarn / pnpm / Bun tabs).
 - Documented the public type catalogue of `@llama-crab/core`: `ChatCompletionCreateParams`, `ChatCompletion`, `ChatCompletionChunk`, `ChatCompletionMessageParam`, `ChatCompletionTool`, `ChatCompletionContentPart`, `CompletionCreateParams`, `Completion`, `CompletionChunk`, `EmbeddingCreateParams`, `EmbeddingCreateResponse`, `Embedding`, `RerankCreateParams`, `RerankResponse`, `TokenizeParams`, `TokenizeResponse`, `TokenizeCountResponse`, `DetokenizeParams`, `DetokenizeResponse`, `ModelLoadParams`, `ModelObject`, `ModelListResponse`, `InternalChatRequest`, `InternalCompletionRequest`, `InternalEmbeddingRequest`, `InternalRerankRequest`, `LlamaCrabSpecificOptions`.
 - Documented the helper catalogue: `toInternalChatCompletionRequest` (alias `toInternalChatRequest`), `toInternalCompletionRequest`, `toInternalEmbeddingRequest`, `toInternalRerankRequest`, `toInternalTokenizeRequest`, `toInternalDetokenizeRequest`, `toChatCompletion`, `toChatCompletionChunk`.
 - Documented the error classes: `LlamaCrabError`, `InvalidRequestError` (`invalid_request`), `UnsupportedFeatureError` (`unsupported_feature`).
 - Documented the full client surface of `@llama-crab/tauri`: `client.models`, `client.chat.completions`, `client.completions` (new vs. old doc), `client.embeddings`, `client.rerank`, `client.extras` (with `tokenize.count`).
 - Documented `CallOptions = { signal?: AbortSignal }` and the streaming cancellation lifecycle.
-- Added a versioning note: both packages are at `0.1.6` and the workspace `package.json` matches.
+- Added a versioning note: both packages are at `0.1.7` and the workspace `package.json` matches.
 
 ### `content/5.typescript/2.client-contracts.md`
 
@@ -40,7 +40,7 @@
 | Client resources | `client.models`, `client.chat.completions` only | `client.models`, `client.chat.completions`, `client.completions`, `client.embeddings`, `client.rerank`, `client.extras` | New resources available. |
 | Embeddings, rerank, tokenize | Documented as Tauri-client features? | Exposed as `client.embeddings`, `client.rerank`, `client.extras.*` | Adapters that previously talked to the IPC directly can now use the client. |
 | Helper set | `toInternalChatRequest`, `toChatCompletion`, `toChatCompletionChunk` listed | Same set, plus `toInternalChatCompletionRequest` alias, `toInternalCompletionRequest`, `toInternalEmbeddingRequest`, `toInternalRerankRequest`, `toInternalTokenizeRequest`, `toInternalDetokenizeRequest` | More helpers exported, all listed in the package's `index.ts`. |
-| Package versions | Not stated | Both at `0.1.6` (workspace `0.1.6`) | Readers know which version the docs describe. |
+| Package versions | Not stated | Both at `0.1.7` (workspace `0.1.7`) | Readers know which version the docs describe. |
 | Snake_case → camelCase mapping | Mentioned in passing for chat | Fully tabulated in the contracts page | Adapter authors can copy the table verbatim. |
 
 ## Open questions for reviewers
