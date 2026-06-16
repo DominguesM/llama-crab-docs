@@ -1,0 +1,11 @@
+const common = {"or":"tai","error":{"title":"Sivua ei löytynyt","description":"Pahoittelut, etsimääsi sivua ei löytynyt."}};
+const docs = {"copy":{"page":"Kopioi sivu","link":"Kopioi Markdown-sivu","view":"Näytä Markdownina","gpt":"Avaa ChatGPT:ssä","claude":"Avaa Claudessa"},"links":"Yhteisö","toc":"Tällä sivulla","menu":"Valikko","report":"Ilmoita ongelmasta","edit":"Muokkaa tätä sivua"};
+const logo = {"copyLogo":"Kopioi logo","copyWordmark":"Kopioi sanamerkki","downloadLogo":"Lataa logo","downloadWordmark":"Lataa sanamerkki","brandAssets":"Brändimateriaalit","logoCopied":"Logo kopioitu","wordmarkCopied":"Sanamerkki kopioitu","logoDownloaded":"Logo ladattu","wordmarkDownloaded":"Sanamerkki ladattu","copyLogoFailed":"Logon kopiointi epäonnistui","copyWordmarkFailed":"Sanamerkin kopiointi epäonnistui"};
+const fi = {
+  common,
+  docs,
+  logo,
+};
+
+export { common, fi as default, docs, logo };
+//# sourceMappingURL=fi-DpsI0BUe.mjs.map

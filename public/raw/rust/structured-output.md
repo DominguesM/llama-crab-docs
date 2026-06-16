@@ -1,0 +1,150 @@
+# Structured Output
+
+> Constrain generation with JSON Schema grammars and parse structured responses.
+
+`llama-crab` supports grammar-constrained generation. The recommended path
+is to convert a JSON Schema into GBNF with `llama_crab::json_schema`,
+attach the grammar to a `LlamaSampler` chain, and run the prompt
+through `create_completion_with_sampler`.
+
+The grammar sampler itself is built with
+`unsafe { LlamaSampler::grammar(llama.model(), &grammar_text, "root") }`
+and requires the `common` cargo feature on `llama-crab-sys` (pulled in
+transitively by the default `llama-crab` build via the `common`
+re-export).
+
+## JSON Schema to grammar
+
+```rust
+use llama_crab::high_level::completion::json_schema_grammar;
+use serde_json::json;
+
+let schema = json!({
+    "type": "object",
+    "properties": {
+        "name": { "type": "string" },
+        "age":  { "type": "integer" }
+    },
+    "required": ["name", "age"]
+});
+
+let grammar_text = json_schema_grammar(&schema)?;
+```
+
+`json_schema_grammar` is a thin wrapper around
+`llama_crab::json_schema::schema_to_grammar(&schema, "root")`, which
+implements a useful subset of JSON Schema 2020-12:
+
+- `type` (`object`, `array`, `string`, `integer`, `number`, `boolean`, `null`)
+- `properties`, `required`, `additionalProperties` (with a schema)
+- `items` (single-schema) and `prefixItems` / `minItems` / `maxItems`
+- `enum` and `const`
+- `minimum`, `maximum`, `exclusiveMinimum`, `exclusiveMaximum`
+- `minLength`, `maxLength`, `pattern`
+- `format` (special-cased: `date-time`, `email`, `uri`, `uuid`)
+- `oneOf`, `anyOf`, `allOf`
+- `$ref` (local, `#/definitions/...`), `definitions` / `$defs`
+
+## Constrained completion
+
+The grammar sampler returns a `Result<LlamaSampler, GrammarError>`
+(because the C string parameters must not contain interior NUL bytes
+and the FFI call can fail), so wrap the call in `unsafe {}`:
+
+```rust
+use llama_crab::chat::{render_builtin, BuiltinTemplate};
+use llama_crab::high_level::chat_completion::{create_chat_completion_with, ChatMessage};
+use llama_crab::high_level::completion::{json_schema_grammar, CompletionOptions};
+use llama_crab::sampling::LlamaSampler;
+use llama_crab::{Llama, LlamaParams, Role};
+use serde_json::json;
+
+let mut llama = Llama::load(LlamaParams::new("models/model.gguf").with_n_ctx(1024))?;
+
+// 1. Build the GBNF grammar.
+let schema = json!({
+    "type": "object",
+    "properties": {
+        "name": { "type": "string" },
+        "age":  { "type": "integer" }
+    },
+    "required": ["name", "age"]
+});
+let grammar_text = json_schema_grammar(&schema)?;
+
+// 2. Build the sampler chain: [grammar, greedy].
+let grammar = unsafe { LlamaSampler::grammar(llama.model(), &grammar_text, "root") }?;
+let greedy = LlamaSampler::greedy()
+    .ok_or_else(|| llama_crab::LlamaError::Batch("greedy sampler init failed".into()))?;
+let mut sampler = LlamaSampler::chain(vec![grammar, greedy], /* no_perf */ false)
+    .ok_or_else(|| llama_crab::LlamaError::Batch("chain init failed".into()))?;
+
+// 3. Render a chat prompt and run the constrained completion.
+let messages = vec![
+    ChatMessage::new(Role::System, "Return only JSON."),
+    ChatMessage::new(Role::User, "Create one fictional person."),
+];
+let prompt = render_builtin(BuiltinTemplate::ChatMl, &messages, &[], true);
+
+let response = llama.create_completion_with_sampler(
+    &prompt,
+    CompletionOptions::new(96),
+    &mut sampler,
+)?;
+
+// 4. Parse the result.
+let parsed: serde_json::Value = serde_json::from_str(&response.text)?;
+println!("{}", serde_json::to_string_pretty(&parsed)?);
+```
+
+The chain order matters: the grammar sampler restricts the candidate
+token set, and `greedy` (or any downstream sampler) picks one. The
+`unsafe` is required because the C strings the grammar sampler wraps
+must outlive the sampler, which is the case here because
+`grammar_text` is a local `String` and `llama` outlives the call.
+
+## Tools versus structured output
+
+Use structured output when the response itself must match a schema. Use
+a tool-call pattern when the model should choose or populate an action
+that your Rust code will execute.
+
+`llama_crab::chat::tool_call` provides:
+
+- `ToolDefinition` — a JSON-Schema-shaped tool description.
+- `ToolCall` — a parsed invocation `{ id, name, arguments }`.
+- `ToolParser` / `extract_tool_calls` — non-streaming parser for a
+complete response.
+- `ToolCallStream` — OpenAI-style streaming deltas with `id`, `name`,
+`arguments` and `completed` fields.
+
+The `tools` example in `llama-crab-examples` demonstrates the practical
+pattern: describe the tool in the system prompt, ask the model for a
+JSON call, parse the call with `extract_tool_calls` or `ToolCallStream`,
+execute the function in Rust, then append a `Role::Tool` result message
+via `ChatMessage::tool_result(id, content)` and continue the loop.
+
+## Streaming deltas with `llguidance`
+
+`llama-crab` also exposes the `llguidance` feature, which adds the
+`llguidance` sampler as an alternative GBNF/JSON-Schema backend. Enable
+it with `features = ["llguidance"]`; the runtime API is the same —
+build a sampler with `LlamaSampler::grammar` (or the `llguidance`
+equivalent) and feed it into `create_completion_with_sampler`. The
+backend has different performance characteristics and is mostly useful
+when you need its constrained-decoding capabilities on top of an
+existing prompt grammar.
+
+## Operational notes
+
+- The `grammar` sampler requires the `common` feature on the
+`llama-crab-sys` build. If you disable default features, make sure
+`common` is enabled (or that the GBNF string is simple enough for the
+grammar-free samplers).
+- Stop strings, logit biases and the `min_tokens` guard from
+`CompletionOptions` work alongside the grammar sampler — but a stop
+string that fires before a value is complete will truncate the
+output, so prefer schema constraints when correctness matters.
+- After generation, parse and validate the response with `serde_json`
+(and `jsonschema` for stricter validation) before treating it as
+well-formed.

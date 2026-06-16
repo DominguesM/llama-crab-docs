@@ -1,0 +1,11 @@
+const common = {"or":"או","error":{"title":"העמוד לא נמצא","description":"אנו מתנצלים, אך העמוד שאתה מחפש לא קיים."}};
+const docs = {"copy":{"page":"העתק עמוד","link":"העתק עמוד Markdown","view":"הצג כ-Markdown","gpt":"פתח ב-ChatGPT","claude":"פתח ב-Claude"},"links":"קהילה","toc":"בעמוד זה","menu":"תפריט","report":"דווח על בעיה","edit":"ערוך עמוד זה"};
+const logo = {"copyLogo":"העתק לוגו","copyWordmark":"העתק סימן מילולי","downloadLogo":"הורד לוגו","downloadWordmark":"הורד סימן מילולי","brandAssets":"נכסי מותג","logoCopied":"הלוגו הועתק","wordmarkCopied":"הסימן המילולי הועתק","logoDownloaded":"הלוגו הורד","wordmarkDownloaded":"הסימן המילולי הורד","copyLogoFailed":"העתקת הלוגו נכשלה","copyWordmarkFailed":"העתקת הסימן המילולי נכשלה"};
+const he = {
+  common,
+  docs,
+  logo,
+};
+
+export { common, he as default, docs, logo };
+//# sourceMappingURL=he-DT2F1kNa.mjs.map

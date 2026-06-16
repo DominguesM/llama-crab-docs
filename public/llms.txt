@@ -1,0 +1,46 @@
+# llama-crab
+
+## Documentation Sets
+
+- [llama-crab](https://dominguesm.github.io/llms-full.txt)
+
+## Docs
+
+- [llama-crab documentation](https://dominguesm.github.io/raw/getting-started/introduction.md): Run local GGUF models from Rust, HTTP, Tauri, and TypeScript applications.
+- [Installation](https://dominguesm.github.io/raw/getting-started/installation.md): Add llama-crab to a Rust project and prepare native build requirements.
+- [First run](https://dominguesm.github.io/raw/getting-started/first-run.md): Create a small Rust application and run llama-crab against a GGUF model.
+- [Models](https://dominguesm.github.io/raw/getting-started/models.md): Choose, store, and match GGUF model files for llama-crab workloads.
+- [Backends](https://dominguesm.github.io/raw/getting-started/backends.md): Select llama-crab compute backends with Cargo features.
+- [Package Map](https://dominguesm.github.io/raw/rust/workspace.md): Map the Rust and TypeScript packages that make up llama-crab.
+- [Model Lifecycle](https://dominguesm.github.io/raw/rust/lifecycle.md): Load, inspect, and reuse llama-crab models safely in Rust applications.
+- [Text Completion](https://dominguesm.github.io/raw/rust/completion.md): Generate text completions with prompts, options, streaming, and custom samplers.
+- [Chat](https://dominguesm.github.io/raw/rust/chat.md): Render role-tagged messages into chat prompts and generate responses.
+- [Embeddings](https://dominguesm.github.io/raw/rust/embeddings.md): Extract embeddings, configure pooling, and run similarity or reranking flows.
+- [Multimodal](https://dominguesm.github.io/raw/rust/multimodal.md): Use mtmd vision and audio support with text models, projector files, and image or audio prompts.
+- [Structured Output](https://dominguesm.github.io/raw/rust/structured-output.md): Constrain generation with JSON Schema grammars and parse structured responses.
+- [Running the Server](https://dominguesm.github.io/raw/server/running.md): Install, configure and start the llama-crab-server HTTP process.
+- [OpenAI-Compatible API](https://dominguesm.github.io/raw/server/openai-api.md): HTTP routes, request and response schemas, errors, and curl examples for llama-crab-server.
+- [Streaming](https://dominguesm.github.io/raw/server/streaming.md): Server-sent event protocol for /v1/completions and /v1/chat/completions.
+- [Operations](https://dominguesm.github.io/raw/server/operations.md): [object Object]
+- [Tauri Plugin](https://dominguesm.github.io/raw/tauri/plugin.md): Install and understand the llama-crab Tauri plugin.
+- [Tauri Permissions](https://dominguesm.github.io/raw/tauri/permissions.md): Configure Tauri v2 permissions for llama-crab IPC commands.
+- [TypeScript Client for Tauri](https://dominguesm.github.io/raw/tauri/typescript-client.md): Use the @llama-crab/tauri OpenAI-like client with Tauri IPC.
+- [Tauri section update notes](https://dominguesm.github.io/raw/tauri/update_notes.md)
+- [Packages](https://dominguesm.github.io/raw/typescript/packages.md): TypeScript packages for shared contracts and Tauri frontend clients.
+- [Client Contracts](https://dominguesm.github.io/raw/typescript/client-contracts.md): Public and internal TypeScript contracts used by llama-crab clients and adapters.
+- [TypeScript section update notes](https://dominguesm.github.io/raw/typescript/update_notes.md)
+- [Performance](https://dominguesm.github.io/raw/guides/performance.md): Tune llama-crab performance by adjusting build mode, model parameters, threads, GPU offload, and measurement strategy.
+- [Mobile](https://dominguesm.github.io/raw/guides/mobile.md): Configure llama-crab for mobile deployments with presets, conservative defaults, and multimodal constraints.
+- [Troubleshooting Models](https://dominguesm.github.io/raw/guides/troubleshooting-models.md): Diagnose common llama-crab model, backend, allocation, vision, embedding, reranking, and server feature issues.
+- [Crates and packages](https://dominguesm.github.io/raw/reference/crates.md): Stable package contracts for Rust crates and TypeScript packages.
+- [Cargo features](https://dominguesm.github.io/raw/reference/cargo-features.md): Feature flags for native backends and optional llama-crab capabilities.
+- [Versioning](https://dominguesm.github.io/raw/reference/versioning.md): Release alignment guidance for llama-crab packages and documentation.
+- [Examples](https://dominguesm.github.io/raw/examples/examples.md): Runnable Rust and Tauri examples that cover every public feature of llama-crab 0.1.8.
+- [Development](https://dominguesm.github.io/raw/contributing/development.md): Contributor setup, local checkout workflows, and validation commands for llama-crab development.
+- [Examples](https://dominguesm.github.io/raw/contributing/examples.md): Guidance for adding, validating, and documenting llama-crab examples.
+- [Releases](https://dominguesm.github.io/raw/contributing/releases.md): Release checklist for keeping crates, packages, API docs, and examples aligned.
+- [Troubleshooting](https://dominguesm.github.io/raw/troubleshooting.md): Common fixes for server, Tauri IPC, streaming, embeddings, and multimodal issues.
+
+## Landing
+
+- [llama-crab - Local GGUF inference for Rust, server, Tauri, and TypeScript](https://dominguesm.github.io/raw/index.md): Run local GGUF models from your applications. Rust SDK, OpenAI-compatible HTTP server, Tauri plugin, and TypeScript client contracts.

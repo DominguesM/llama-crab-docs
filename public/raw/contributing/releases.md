@@ -1,0 +1,50 @@
+# Releases
+
+> Release checklist for keeping crates, packages, API docs, and examples aligned.
+
+Release work must keep crates, TypeScript packages, generated API
+docs, and examples aligned.
+
+Before release:
+
+- Verify crate manifests and feature defaults.
+- Verify package manifests and generated TypeScript declarations.
+- Run packaging dry-runs where possible.
+- Confirm the workspace `version` in `Cargo.toml` and the `version`
+fields in `packages/core/package.json` and
+`packages/tauri/package.json` all match.
+- Run the `CONTRIBUTING.md` PR checklist locally
+(`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test`, `cargo doc`, `pnpm typecheck`, `pnpm test`).
+- Rebuild docs from the same source state that will be published.
+
+## Cross-package version alignment
+
+The workspace, all Rust crates, and both TypeScript packages should
+move together. The current release (0.1.8) aligns all Rust crates and
+TypeScript packages to the same version — `llama-crab-sys` is now
+published in lockstep with the rest of the workspace. The previous
+release (0.1.7) fixed a use-after-move
+hazard in the safe Rust crate's self-referential struct layout:
+`LlamaModel` and `LlamaContext` use `Box<...>` + `NonNull<...>` instead
+of stacked borrows over `&'a LlamaModel`, the drop order is hardened to
+free `context` before `model`, and the lifetime parameter is removed
+from `LlamaContext`. The public API surface is unchanged. The previous
+release (0.1.6) added Hugging Face Hub support in lockstep across the
+workspace. Future releases should follow the same pattern: fix the
+issue, document the change, document the feature flags, and bump every
+package in the same commit.
+
+For docs.rs failures, inspect the published `.crate` artifact when
+diagnosing a released version. A fixed local manifest does not change
+a tarball that has already been published.
+
+The current MSRV (`1.88`) is pinned in `rust-toolchain.toml`. Bumping
+the MSRV is a breaking change and requires a major version bump; new
+code must remain buildable on 1.88.
+
+## Recent release highlights
+
+The next release notes should keep the same shape as
+`CHANGELOG.md`: `### Added`, `### Changed`, `### Fixed`, plus a
+`### Notes` block when MSRV or major restructure changes are
+involved.

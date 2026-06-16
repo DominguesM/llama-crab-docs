@@ -1,0 +1,11 @@
+const common = {"or":"o","error":{"title":"Página no encontrada","description":"Lo sentimos, no se pudo encontrar esta página."}};
+const docs = {"copy":{"page":"Copiar página","link":"Copiar página en Markdown","view":"Ver como Markdown","gpt":"Abrir en ChatGPT","claude":"Abrir en Claude"},"links":"Comunidad","toc":"En esta página","menu":"Menú","report":"Reportar un problema","edit":"Editar esta página"};
+const logo = {"copyLogo":"Copiar logo","copyWordmark":"Copiar wordmark","downloadLogo":"Descargar logo","downloadWordmark":"Descargar wordmark","brandAssets":"Recursos de marca","logoCopied":"Logo copiado","wordmarkCopied":"Wordmark copiado","logoDownloaded":"Logo descargado","wordmarkDownloaded":"Wordmark descargado","copyLogoFailed":"No se pudo copiar el logo","copyWordmarkFailed":"No se pudo copiar el wordmark"};
+const es = {
+  common,
+  docs,
+  logo,
+};
+
+export { common, es as default, docs, logo };
+//# sourceMappingURL=es-CIyxuj9w.mjs.map

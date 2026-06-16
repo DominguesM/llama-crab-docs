@@ -1,0 +1,126 @@
+# Installation
+
+> Add llama-crab to a Rust project and prepare native build requirements.
+
+Add `llama-crab` to a Rust project when you want to load GGUF models directly
+from application code.
+
+```tomltitle="Cargo.toml"
+[dependencies]
+llama-crab = "0.1.8"
+```
+
+The crate defaults to `["openmp", "metal"]`. Pin the version you want
+explicitly; the workspace tracks `0.1.8` at the time of writing.
+
+## Native requirements
+
+`llama-crab-sys` builds the native llama.cpp stack. Install the platform C++
+toolchain and CMake before the first `cargo build`. **MSRV is 1.88** — the
+toolchain is pinned in `rust-toolchain.toml` at the repository root.
+
+<table>
+<thead>
+  <tr>
+    <th>
+      Platform
+    </th>
+    
+    <th>
+      Minimum setup
+    </th>
+  </tr>
+</thead>
+
+<tbody>
+  <tr>
+    <td>
+      macOS
+    </td>
+    
+    <td>
+      Xcode Command Line Tools and CMake
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+      Debian/Ubuntu
+    </td>
+    
+    <td>
+      <code>
+        build-essential
+      </code>
+      
+       and <code>
+        cmake
+      </code>
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+      Fedora/RHEL
+    </td>
+    
+    <td>
+      <code>
+        gcc
+      </code>
+      
+      , <code>
+        gcc-c++
+      </code>
+      
+      , <code>
+        cmake
+      </code>
+      
+      , and <code>
+        make
+      </code>
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+      Windows
+    </td>
+    
+    <td>
+      Visual Studio C++ workload and CMake
+    </td>
+  </tr>
+</tbody>
+</table>
+
+## Feature selection
+
+Be explicit about compute backends in applications:
+
+```tomltitle="Cargo.toml"
+[dependencies]
+llama-crab = { version = "0.1.8", default-features = false, features = ["openmp"] }
+```
+
+Common combinations are listed in
+[Backends](/getting-started/backends); the full current feature matrix lives
+in [Cargo features](/reference/cargo-features).
+
+## Server and Tauri plugin
+
+Both `llama-crab-server` and `tauri-plugin-llama-crab` are published
+separately. Install the server binary when you want a local OpenAI-compatible
+HTTP API:
+
+```bash
+cargo install llama-crab-server --features mtmd --force
+```
+
+The Tauri plugin is added to a Tauri v2 application the same way as any
+other `tauri-plugin-*` crate (see
+[Tauri plugin](/tauri/plugin)). Its `mtmd` feature enables multimodal
+(vision) inference and is enabled by default in 0.1.8 alongside `llama-crab`'s
+`hf-hub` feature so Tauri apps can load Hugging Face model IDs through
+`load_model` without extra feature wiring.

@@ -1,0 +1,11 @@
+const common = {"or":"eller","error":{"title":"Side ikke funnet","description":"Vi beklager, men siden du leter etter kunne ikke finnes."}};
+const docs = {"copy":{"page":"Kopier side","link":"Kopier Markdown-side","view":"Vis som Markdown","gpt":"Åpne i ChatGPT","claude":"Åpne i Claude"},"links":"Fellesskap","toc":"På denne siden","menu":"Meny","report":"Rapporter et problem","edit":"Rediger denne siden"};
+const logo = {"copyLogo":"Kopier logo","copyWordmark":"Kopier wordmark","downloadLogo":"Last ned logo","downloadWordmark":"Last ned wordmark","brandAssets":"Merkevareressurser","logoCopied":"Logo kopiert","wordmarkCopied":"Wordmark kopiert","logoDownloaded":"Logo lastet ned","wordmarkDownloaded":"Wordmark lastet ned","copyLogoFailed":"Kunne ikke kopiere logo","copyWordmarkFailed":"Kunne ikke kopiere wordmark"};
+const nb = {
+  common,
+  docs,
+  logo,
+};
+
+export { common, nb as default, docs, logo };
+//# sourceMappingURL=nb-CCh2ouuQ.mjs.map

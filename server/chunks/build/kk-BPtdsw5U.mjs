@@ -1,0 +1,11 @@
+const common = {"or":"немесе","error":{"title":"Бет табылмады","description":"Кешіріңіз, бірақ сіз іздеген бет табылмады."}};
+const docs = {"copy":{"page":"Бетті көшіру","link":"Markdown бетін көшіру","view":"Markdown ретінде көру","gpt":"ChatGPT-те ашу","claude":"Claude-те ашу"},"links":"Қауымдастық","toc":"Осы бетте","menu":"Мәзір","report":"Мәселе туралы хабарлау","edit":"Осы бетті өңдеу"};
+const logo = {"copyLogo":"Логотипті көшіру","copyWordmark":"Сөз белгісін көшіру","downloadLogo":"Логотипті жүктеу","downloadWordmark":"Сөз белгісін жүктеу","brandAssets":"Бренд материалдары","logoCopied":"Логотип көшірілді","wordmarkCopied":"Сөз белгісі көшірілді","logoDownloaded":"Логотип жүктелді","wordmarkDownloaded":"Сөз белгісі жүктелді","copyLogoFailed":"Логотипті көшіру сәтсіз","copyWordmarkFailed":"Сөз белгісін көшіру сәтсіз"};
+const kk = {
+  common,
+  docs,
+  logo,
+};
+
+export { common, kk as default, docs, logo };
+//# sourceMappingURL=kk-BPtdsw5U.mjs.map

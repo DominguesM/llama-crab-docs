@@ -1,0 +1,11 @@
+const common = {"or":"կամ","error":{"title":"Էջը չի գտնվել","description":"Ներողություն, բայց այն էջը, որը փնտրում եք, չի գտնվել:"}};
+const docs = {"copy":{"page":"Պատճենել էջը","link":"Պատճենել Markdown էջը","view":"Դիտել որպես Markdown","gpt":"Բացել ChatGPT-ում","claude":"Բացել Claude-ում"},"links":"Համայնք","toc":"Այս էջում","menu":"Ընտրացանկ","report":"Հաղորդել խնդրի մասին","edit":"Խմբագրել այս էջը"};
+const logo = {"copyLogo":"Copy logo","copyWordmark":"Copy wordmark","downloadLogo":"Download logo","downloadWordmark":"Download wordmark","brandAssets":"Brand assets","logoCopied":"Logo copied","wordmarkCopied":"Wordmark copied","logoDownloaded":"Logo downloaded","wordmarkDownloaded":"Wordmark downloaded","copyLogoFailed":"Failed to copy logo","copyWordmarkFailed":"Failed to copy wordmark"};
+const hy = {
+  common,
+  docs,
+  logo,
+};
+
+export { common, hy as default, docs, logo };
+//# sourceMappingURL=hy-BYYp5cxG.mjs.map

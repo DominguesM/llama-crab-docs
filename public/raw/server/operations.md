@@ -1,0 +1,341 @@
+# Operations
+
+> [object Object]
+
+`llama-crab-server` is a single-model HTTP process. There is no multi-model routing, no request rate limiting, and no built-in metrics endpoint — operationally, treat each process as one loaded GGUF running on one synchronous worker thread.
+
+## Process model
+
+The binary is a tokio + axum application whose entire inference path lives on a single dedicated thread named `llama-crab-worker`. The structure is:
+
+1. `main` initialises `tracing_subscriber`, parses the CLI, and binds the TCP listener (`main.rs:645-686`).
+2. `spawn_worker` (`main.rs:826`) calls `Llama::load` on the worker thread. If loading fails, the worker exits and `main` returns an error **before** binding the port — the server never serves requests in a degraded state.
+3. With the worker running, the HTTP `Router` is built and `axum::serve` starts accepting connections.
+4. Each HTTP handler sends a `Job` over a `std::sync::mpsc` channel and awaits a `oneshot::Receiver` (or, for streaming, a `tokio_mpsc::UnboundedReceiver` of `StreamFrame`).
+5. The worker processes one `Job` at a time in a `for job in rx` loop. There is no queueing, no concurrency, and no preemption — a long completion blocks all subsequent requests.
+
+Because the worker is synchronous and the HTTP layer is async, the server must be `cargo run` with the default `rt-multi-thread` tokio runtime. The axum `serve` call does not install a graceful-shutdown handler, so `Ctrl+C` aborts the process via tokio's default behaviour.
+
+## Startup banner
+
+On a successful start the binary writes a banner to stderr (`main.rs:676-683`):
+
+```text
+llama-crab-server listening on http://127.0.0.1:8080
+  model : llama-crab
+  routes: /health, /v1/models, /v1/completions, /v1/chat/completions, /v1/embeddings, /v1/rerank, /extras/tokenize, /extras/tokenize/count, /extras/detokenize
+  ctrl+c to stop
+```
+
+The route list is hard-coded in the banner and does not include the alias paths `/v1/reranking`, `/rerank`, and `/reranking` even though they are registered. Parse the live process to enumerate every available path (see [Health and readiness](#health-and-readiness)).
+
+## Health and readiness
+
+### Liveness
+
+`GET /health` (`main.rs:690`) is a static response that does not inspect the worker:
+
+```bash
+curl -f http://127.0.0.1:8080/health
+```
+
+```json
+{ "status": "ok" }
+```
+
+The handler returns `200 OK` as long as the axum process is running. A failure here means the process is down or unreachable, not that the model failed to load.
+
+### Model verification
+
+`GET /v1/models` returns the loaded model. Use it to confirm that the right `--model-name` is being advertised and to verify the process is past model loading:
+
+```bash
+curl -f http://127.0.0.1:8080/v1/models
+```
+
+### Deep readiness
+
+For deployment readiness, run a small request that matches the model's role. A text completion with a short prompt, an embedding call, or a rerank call all exercise the worker end-to-end. `/health` alone is not enough — a worker that crashed after `spawn_worker` returned would still respond to `/health` with `200 OK` while failing every real request.
+
+A pragmatic readiness check:
+
+```bash
+# Adjust the role to match the deployment.
+curl -fsS http://127.0.0.1:8080/v1/chat/completions \
+  -H 'content-type: application/json' \
+  -d '{"model":"llama-crab","messages":[{"role":"user","content":"ping"}],"max_tokens":4}'
+```
+
+## Logging
+
+The server uses `tracing_subscriber::fmt` with an `EnvFilter` (`main.rs:646-651`). Without `RUST_LOG`, the filter is `info`. Useful levels:
+
+```bash
+# Default — startup banner and the listen event.
+RUST_LOG=info llama-crab-server --model /models/model.gguf
+
+# Verbose — request-level tracing from tower_http::trace::TraceLayer.
+RUST_LOG=llama_crab_server=debug,tower_http=info llama-crab-server --model /models/model.gguf
+```
+
+`TraceLayer::new_for_http()` is enabled by default (`main.rs:673`). With the default config it emits request/response lifecycle events at `DEBUG`/`INFO`/`TRACE` — set `RUST_LOG=tower_http=info` (or `debug`) to surface them. The layer does not include request bodies.
+
+## Capacity planning
+
+### One model per process
+
+`llama-crab-server` is a single-model server. To serve multiple models, run multiple processes on different ports and route at a higher layer (e.g. nginx, a sidecar proxy, or a custom gateway). Each process owns its own `Llama` instance and KV cache, with no shared state between them.
+
+### Tuning knobs
+
+<table>
+<thead>
+  <tr>
+    <th>
+      Flag
+    </th>
+    
+    <th>
+      Effect
+    </th>
+  </tr>
+</thead>
+
+<tbody>
+  <tr>
+    <td>
+      <code>
+        --n-ctx
+      </code>
+    </td>
+    
+    <td>
+      Context window. Larger contexts cost memory and may force longer prefill latencies.
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+      <code>
+        --n-batch
+      </code>
+    </td>
+    
+    <td>
+      Prompt-processing batch size. Larger values use more memory but reduce prefill time.
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+      <code>
+        --n-threads
+      </code>
+    </td>
+    
+    <td>
+      CPU decode threads. Set to the number of physical cores; with mobile presets also drives batch threads.
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+      <code>
+        --n-gpu-layers
+      </code>
+    </td>
+    
+    <td>
+      Number of transformer layers to offload. Tune until the model fits in VRAM and decode latency stops improving.
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+      <code>
+        --mobile-preset
+      </code>
+    </td>
+    
+    <td>
+      Coordinated trade-off (<code>
+        low-ram
+      </code>
+      
+      , <code>
+        balanced
+      </code>
+      
+      , <code>
+        gpu-max
+      </code>
+      
+      ) that replaces the legacy <code>
+        n_*
+      </code>
+      
+       defaults with mobile-tuned values.
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+      <code>
+        --pooling
+      </code>
+    </td>
+    
+    <td>
+      Embedding / reranking pooling strategy. Required for some models (<code>
+        mean
+      </code>
+      
+       for BGE, <code>
+        rank
+      </code>
+      
+       for cross-encoders).
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+      <code>
+        --embeddings
+      </code>
+      
+      , <code>
+        --reranking
+      </code>
+    </td>
+    
+    <td>
+      Load the model in embedding or reranking mode. Must be set at startup; the worker rejects embedding/rerank requests when the corresponding flag is not set.
+    </td>
+  </tr>
+</tbody>
+</table>
+
+### Memory and concurrency
+
+The worker is single-threaded; the server does not pipeline requests. A long generation blocks every other request (their jobs queue in the mpsc channel but their `rx.await` resolves only after the in-flight job returns). For mixed workloads, run multiple processes and load-balance at the HTTP layer.
+
+The server applies no `RequestBodyLimitLayer` or request timeout. Multi-GB JSON bodies and unbounded request durations are accepted. Place a reverse proxy in front of the process if you need to enforce either.
+
+## Observability gaps
+
+`llama-crab-server` does not expose Prometheus metrics, a `/metrics` endpoint, an OpenTelemetry exporter, or structured request logs. The only observability surface is `tracing`:
+
+- The startup banner on stderr.
+- A single `tracing::info!` line on `listen` (`main.rs:684`).
+- `tower_http::trace` request lifecycle events (level controlled by `RUST_LOG`).
+- Worker errors logged via `tracing::error!` for multimodal projector failures (`main.rs:891-901`).
+
+For production observability, add an external proxy that records HTTP-level metrics (request count, latency, status codes) and rely on the server's logs for inference-side errors.
+
+## Security posture
+
+The server is designed for local-inference workflows. The CORS layer is `CorsLayer::permissive()` (`main.rs:672`), which returns `Access-Control-Allow-Origin: *` and accepts any method or header. Bind to `127.0.0.1` unless you intentionally expose the process:
+
+```bash
+llama-crab-server --host 127.0.0.1 --model /models/model.gguf
+```
+
+If you bind to a network interface, place authentication, TLS, rate limiting and request-size controls in front of the process — the server itself implements none of these.
+
+The `model` and `user` fields on every request body are read and discarded. The server does not implement per-user or per-tenant separation.
+
+## Error handling
+
+### Non-streaming routes
+
+Non-streaming handlers return errors as JSON with status codes:
+
+<table>
+<thead>
+  <tr>
+    <th>
+      Status
+    </th>
+    
+    <th>
+      Trigger
+    </th>
+    
+    <th>
+      Body
+    </th>
+  </tr>
+</thead>
+
+<tbody>
+  <tr>
+    <td>
+      <code>
+        400
+      </code>
+    </td>
+    
+    <td>
+      Worker validation or processing error
+    </td>
+    
+    <td>
+      <code>
+        {"error": {"message": "...", "type": "invalid_request"}}
+      </code>
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+      <code>
+        500
+      </code>
+    </td>
+    
+    <td>
+      Channel closed or oneshot reply dropped
+    </td>
+    
+    <td>
+      same envelope
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+      <code>
+        400
+      </code>
+      
+       (plain text)
+    </td>
+    
+    <td>
+      Axum JSON deserialization failure
+    </td>
+    
+    <td>
+      axum's default body
+    </td>
+  </tr>
+</tbody>
+</table>
+
+The envelope is constructed by `error_response` (`main.rs:2507`); the `type` field is always `"invalid_request"` for the JSON form. See the [OpenAI-Compatible API reference](/server/openai-api#error-envelope) for the full list of validation errors.
+
+### Streaming routes
+
+A streaming request can fail before the SSE response starts (then the error is returned as a normal `400`) or after it starts. Mid-stream failures arrive as `event: error\ndata: <message>\n\n` followed by the usual `data: [DONE]`. See [Streaming](/server/streaming#error-frames).
+
+### Common failure modes
+
+- `--model` missing or unreadable: the worker exits during startup, the binary returns an error, and the process terminates without binding the port.
+- `--mmproj` set but binary built without `--features mtmd`: `multimodal chat content requires llama-crab-server built with the 'mtmd' feature` for every chat request that includes media.
+- Image URL not a local path or `file://` URL: `image_url.url must be a local file path or file:// URL`.
+- `logprobs: true` on a multimodal chat request: `logprobs are not supported for multimodal chat`.
+
+## Versioning
+
+`llama-crab-server` first shipped in **0.1.4 (2026-06-14)**. The 0.1.5 release moved the documentation site but did not change any server behaviour. The full per-release notes are in [`llama-crab/CHANGELOG.md`](https://github.com/DominguesM/llama-crab/blob/main/CHANGELOG.md).

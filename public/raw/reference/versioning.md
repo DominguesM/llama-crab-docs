@@ -1,0 +1,49 @@
+# Versioning
+
+> Release alignment guidance for llama-crab packages and documentation.
+
+Prefer matching llama-crab package versions across Rust and TypeScript
+when one application uses more than one integration surface.
+
+## Release alignment
+
+llama-crab keeps Rust crate releases and TypeScript package releases
+aligned when public contracts change. The current workspace version is
+`0.1.8` (Rust crates and `@llama-crab/core` / `@llama-crab/tauri` are
+released together).
+
+Notable cross-package guarantees and pin-level facts:
+
+- `Cargo.toml` workspace `version = "0.1.8"`. The same value drives the
+version of every workspace crate.
+- `llama-crab` and `llama-crab-sys` are published in lockstep as of
+`0.1.8`, so consumers can pin `llama-crab = "0.1.8"` and get the
+matching FFI version automatically.
+- `@llama-crab/core` and `@llama-crab/tauri` are at `0.1.8` and depend
+on each other at the same version (`@llama-crab/tauri` depends on
+`@llama-crab/core`).
+- MSRV is `1.88` and is pinned in `rust-toolchain.toml`. Bumping the
+MSRV is a breaking change and requires a major version bump.
+
+For application upgrades:
+
+- Upgrade related Rust crates and TypeScript packages together.
+- Read the generated Rust and TypeScript API references for changed
+signatures.
+- Re-run the server, Tauri, embedding, reranking, or multimodal path
+your app actually uses.
+
+## Documentation versioning
+
+The Docusaurus site (this guide) initially publishes only the current
+documentation. Add Docusaurus versioned docs later if users need docs
+for multiple released versions at the same time.
+
+The previous GitHub Pages site under `dominguesm.github.io/llama-crab/`
+was retired in release 0.1.5 — the docs/ folder and the
+`Publish docs site` workflow have been removed from the source
+repository, and all README files and crate-level docs now point at
+[https://llama-crab.nlp.rocks/](https://llama-crab.nlp.rocks/).
+
+Release chores for maintainers are covered in
+[Releases](/contributing/releases).

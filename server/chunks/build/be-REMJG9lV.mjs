@@ -1,0 +1,11 @@
+const common = {"or":"або","error":{"title":"Старонка не знойдзена","description":"Прабачце, але старонка, якую вы шукаеце, не знойдзена."}};
+const docs = {"copy":{"page":"Скапіраваць старонку","link":"Скапіраваць Markdown-старонку","view":"Праглядзець як Markdown","gpt":"Адкрыць у ChatGPT","claude":"Адкрыць у Claude"},"links":"Супольнасць","toc":"На гэтай старонцы","menu":"Меню","report":"Паведаміць пра праблему","edit":"Рэдагаваць гэтую старонку"};
+const logo = {"copyLogo":"Капіяваць лагатып","copyWordmark":"Капіяваць словесны знак","downloadLogo":"Спампаваць лагатып","downloadWordmark":"Спампаваць словесны знак","brandAssets":"Матэрыялы брэнда","logoCopied":"Лагатып скапіяваны","wordmarkCopied":"Словесны знак скапіяваны","logoDownloaded":"Лагатып спампаваны","wordmarkDownloaded":"Словесны знак спампаваны","copyLogoFailed":"Не ўдалося скапіяваць лагатып","copyWordmarkFailed":"Не ўдалося скапіяваць словесны знак"};
+const be = {
+  common,
+  docs,
+  logo,
+};
+
+export { common, be as default, docs, logo };
+//# sourceMappingURL=be-REMJG9lV.mjs.map

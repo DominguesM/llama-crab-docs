@@ -1,0 +1,11 @@
+const common = {"or":"sau","error":{"title":"Pagina nu a fost găsită","description":"Ne pare rău, dar această pagină nu a putut fi găsită."}};
+const docs = {"copy":{"page":"Copiază pagina","link":"Copiază pagina în Markdown","view":"Vezi ca Markdown","gpt":"Deschide în ChatGPT","claude":"Deschide în Claude"},"links":"Comunitate","toc":"Pe această pagină","menu":"Meniu","report":"Raportează o problemă","edit":"Editează această pagină"};
+const logo = {"copyLogo":"Copiază logo","copyWordmark":"Copiază wordmark","downloadLogo":"Descarcă logo","downloadWordmark":"Descarcă wordmark","brandAssets":"Resurse de brand","logoCopied":"Logo copiat","wordmarkCopied":"Wordmark copiat","logoDownloaded":"Logo descărcat","wordmarkDownloaded":"Wordmark descărcat","copyLogoFailed":"Nu s-a putut copia logo-ul","copyWordmarkFailed":"Nu s-a putut copia wordmark-ul"};
+const ro = {
+  common,
+  docs,
+  logo,
+};
+
+export { common, ro as default, docs, logo };
+//# sourceMappingURL=ro-Ctgj_SAR.mjs.map

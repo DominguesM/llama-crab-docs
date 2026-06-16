@@ -1,0 +1,11 @@
+const common = {"or":"hoặc","error":{"title":"Không tìm thấy trang","description":"Chúng tôi xin lỗi, nhưng trang bạn đang tìm kiếm không tồn tại."}};
+const docs = {"copy":{"page":"Sao chép trang","link":"Sao chép trang Markdown","view":"Xem dưới dạng Markdown","gpt":"Mở trong ChatGPT","claude":"Mở trong Claude"},"links":"Cộng đồng","toc":"Trên trang này","menu":"Menu","report":"Báo cáo sự cố","edit":"Chỉnh sửa trang này"};
+const logo = {"copyLogo":"Sao chép logo","copyWordmark":"Sao chép wordmark","downloadLogo":"Tải logo","downloadWordmark":"Tải wordmark","brandAssets":"Tài nguyên thương hiệu","logoCopied":"Đã sao chép logo","wordmarkCopied":"Đã sao chép wordmark","logoDownloaded":"Đã tải logo","wordmarkDownloaded":"Đã tải wordmark","copyLogoFailed":"Không thể sao chép logo","copyWordmarkFailed":"Không thể sao chép wordmark"};
+const vi = {
+  common,
+  docs,
+  logo,
+};
+
+export { common, vi as default, docs, logo };
+//# sourceMappingURL=vi-D_C3EjFO.mjs.map
